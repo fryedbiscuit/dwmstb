@@ -1,18 +1,15 @@
-all: test dwmstt
+LIBS="-lX11"
 
-dwmstt: main.c modules.c
-	gcc -o dwmstt main.c modules.c
+dwmstb: main.c modules.c setname.c
+	gcc -o dwmstb main.c modules.c setname.c $(LIBS)
 
-run: dwmstt
-	./dwmstt
-
-test: main.c modules.c
-	gcc -o test main.c modules.c -D TEST
-
-trun: test
-	./test
+run: dwmstb
+	./dwmstb
 
 clean:
-	rm -f test dwmstt
+	rm -f dwmstb
 
-.PHONY: all run trun clean
+install: dwmstb
+	install -T -D -m 755  dwmstb $(PREFIX)/usr/local/bin/dwmstb
+
+.PHONY: all run clean
