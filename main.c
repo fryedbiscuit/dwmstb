@@ -17,7 +17,6 @@ int main() {
 		char* buffer = calloc(100,sizeof(char));
 			add_clock(buffer);
 			set_root_name(buffer);
-			strcat(buffer,"😸");
 			printf("\e[1K\r%s", buffer);
 		free(buffer);
 		sleep(10);

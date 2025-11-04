@@ -1,5 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 void add_clock(char * buffer) {
 	time_t now = time(NULL);
