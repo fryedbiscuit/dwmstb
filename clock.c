@@ -8,13 +8,7 @@ void add_clock(char * buffer) {
 	int minute = local_time->tm_min;
 
 	char clock[10];
-	sprintf(clock, "[%02d:%02d]",hour,minute);
+	sprintf(clock, " %02d:%02d",hour,minute);
 
 	strcat(buffer,clock); 
 }
-
-//TODO: get battery status
-// void add_battery(char* buffer){
-// }
-
-
