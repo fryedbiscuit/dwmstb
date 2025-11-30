@@ -36,14 +36,14 @@ void add_battery(char* buffer){
 
 	if (strcmp(status,"Discharging") == 0) {
 		if (percentage < 30){
-			sprintf(newbuffer, " %02d%%%s",percentage, low_battery);
+			sprintf(newbuffer, " %3d%%%s",percentage, low_battery);
 		} else {
-			sprintf(newbuffer, " %02d%%%s",percentage, battery);
+			sprintf(newbuffer, " %3d%%%s",percentage, battery);
 		}
 	} else if (strcmp(status, "Charging") == 0) {
-		sprintf(newbuffer, " %02d%%%s",percentage, lightning);
+		sprintf(newbuffer, " %3d%%%s",percentage, lightning);
 	} else {
-		sprintf(newbuffer, " ---%s", lightning);
+		sprintf(newbuffer, " ----%s", lightning);
 	}
 
 	strcat(buffer, newbuffer);

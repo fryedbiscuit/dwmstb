@@ -1,7 +1,7 @@
 LIBS="-lX11"
-OBJ = main.o clock.o battery.o setname.o
+OBJ = main.o clock.o battery.o setname.o volume.o
 
-dwmstb: main.o clock.o battery.o setname.o
+dwmstb: ${OBJ}
 	g++ -o dwmstb $(OBJ) $(LIBS)
 
 ${OBJ}:
