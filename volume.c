@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 void add_volume(char* buffer){
-	const char volume_mute[]   = "\U0001F507";
-	const char volume_low[]    = "\U0001F508";
-	const char volume_medium[] = "\U0001F509";
-	const char volume_high[]   = "\U0001F50A";
+	const char* volume_mute   = "\U0001F507";
+	const char* volume_low    = "\U0001F508";
+	const char* volume_medium = "\U0001F509";
+	const char* volume_high   = "\U0001F50A";
 
 	char newbuffer[10]; 
 	char mute;
@@ -18,9 +18,10 @@ void add_volume(char* buffer){
 	// Get current volume
 	FILE* pa_vol = popen("pamixer --get-volume", "r");
 	fscanf(pa_vol,"%d", &volume);
+	pclose(pa_vol);
 
 	if (mute == 't'){
-		sprintf(newbuffer, "(%2d%%)%s ",volume, mute);
+		sprintf(newbuffer, "(%2d%%)%s ",volume, &mute);
 	} else {
 		if (volume < 30){
 			sprintf(newbuffer, "%3d%%%s ",volume, volume_low);

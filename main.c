@@ -19,7 +19,9 @@ int main() {
 		char* buffer = (char*) calloc(100,sizeof(char));
 			add_clock(buffer);
 			add_battery(buffer);
+#ifndef __ANDROID__
 			add_volume(buffer);
+#endif
 			set_root_name(buffer);
 			printf("\e[1K\r%s", buffer);
 			fflush(stdout);

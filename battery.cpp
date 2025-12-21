@@ -1,22 +1,44 @@
+#ifdef __ANDROID__
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include "inc/json.hpp"
+using json = nlohmann::json;
+
+
+extern "C" void add_battery(char* buffer){
+
+	// char* newbuffer = (char*)std::malloc(10 * sizeof(char));
+	char * newbuffer = new char[10];
+	FILE* p = popen("termux-battery-status","r");
+	json batt = json::parse(p);
+	pclose(p);
+	sprintf(newbuffer, " [%02d%%}",(int)batt["percentage"]);
+	std::strcat(buffer, newbuffer);
+	delete [] newbuffer;
+}
+#else
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-long fsize(FILE* f){
-	long size,cur;
+// long fsize(FILE f){
+// 	long size,cur;
 
-	cur = ftell(f);
-	fseek(f,0,SEEK_END);
-	size = ftell(f);
-	fseek(f,cur,SEEK_SET);
+// 	cur = ftell(f);
+// 	fseek(f,0,SEEK_END);
+// 	size = ftell(f);
+// 	fseek(f,cur,SEEK_SET);
 	
-	return size;
-}
+// 	return size;
+// }
 
 void add_battery(char* buffer){
-	const char battery[] = "\U0001F50B";
-	const char low_battery[] = "\U0001FAAB";
-	const char lightning[] = "\u26A1";
+	const char* battery = "\U0001F50B";
+	const char* low_battery = "\U0001FAAB";
+	const char* lightning = "\u26A1";
 	char* emoji = NULL;
 
 	char newbuffer[10];
@@ -48,3 +70,4 @@ void add_battery(char* buffer){
 
 	strcat(buffer, newbuffer);
 }
+#endif

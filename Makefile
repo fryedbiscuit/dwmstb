@@ -1,3 +1,6 @@
+CC=gcc
+CXX=g++
+
 LIBS="-lX11"
 OBJ = main.o clock.o battery.o setname.o volume.o
 
