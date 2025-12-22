@@ -1,73 +1,72 @@
-#ifdef __ANDROID__
-
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+
+// Android needs json library
+#ifdef __ANDROID__
 #include "inc/json.hpp"
 using json = nlohmann::json;
-
+#endif
 
 extern "C" void add_battery(char* buffer){
-
-	// char* newbuffer = (char*)std::malloc(10 * sizeof(char));
-	char * newbuffer = new char[10];
-	FILE* p = popen("termux-battery-status","r");
-	json batt = json::parse(p);
-	pclose(p);
-	sprintf(newbuffer, " [%02d%%}",(int)batt["percentage"]);
-	std::strcat(buffer, newbuffer);
-	delete [] newbuffer;
-}
-#else
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-// long fsize(FILE f){
-// 	long size,cur;
-
-// 	cur = ftell(f);
-// 	fseek(f,0,SEEK_END);
-// 	size = ftell(f);
-// 	fseek(f,cur,SEEK_SET);
-	
-// 	return size;
-// }
-
-void add_battery(char* buffer){
-	const char* battery = "\U0001F50B";
+	const char* battery 	= "\U0001F50B";
 	const char* low_battery = "\U0001FAAB";
-	const char* lightning = "\u26A1";
-	char* emoji = NULL;
+	const char* lightning 	= "\u26A1";
 
 	char newbuffer[10];
-	char status[20];
+	bool charging = false;
+	bool full_charging = false;
 	int percentage;
-	FILE* f = NULL;
+	FILE* file = NULL;
+
+#ifndef __ANDROID__
+	char status[20];
 
 	// Get current capacity
-	f = fopen("/sys/class/power_supply/BAT1/capacity","r");
-	fscanf(f,"%d",&percentage);
-	fclose(f);
+	file = fopen("/sys/class/power_supply/BAT1/capacity","r");
+	fscanf(file,"%d",&percentage);
+	fclose(file);
 
 	// Get charging status
-	f = fopen("/sys/class/power_supply/BAT1/status","r");
-	fscanf(f,"%s",&status);
-	fclose(f);
+	file = fopen("/sys/class/power_supply/BAT1/status","r");
+	fscanf(file,"%s",&status);
+	fclose(file);
+
+	file = NULL;
 
 	if (strcmp(status,"Discharging") == 0) {
-		if (percentage < 30){
-			sprintf(newbuffer, " %3d%%%s",percentage, low_battery);
-		} else {
-			sprintf(newbuffer, " %3d%%%s",percentage, battery);
-		}
+		charging = false;
+		full_charging = false;
 	} else if (strcmp(status, "Charging") == 0) {
-		sprintf(newbuffer, " %3d%%%s",percentage, lightning);
+		charging = true
+		full_charging = false;
 	} else {
-		sprintf(newbuffer, " ----%s", lightning);
+		charging = true;
+		full_charging = true;
 	}
+#else
+	file = popen("termux-battery-status","r");
+	json batt = json::parse(file);
+	pclose(file);
+	percentage = (int)batt["percentage"];
 
+	if(batt["plugged"] == "PLUGGED") {
+		charging = true;
+		if (percentage == 100) full_charging = true;
+	}
+#endif
+
+	// Printing logic
+	if (full_charging) {
+		sprintf(newbuffer, " ----%s", lightning);
+	} else
+	if (charging) {
+		sprintf(newbuffer, " %3d%%%s",percentage, lightning);
+	} else
+	if (percentage > 30) {
+		sprintf(newbuffer, " %3d%%%s",percentage, battery);
+	} else {
+		sprintf(newbuffer, " %3d%%%s",percentage, low_battery);
+	}
 	strcat(buffer, newbuffer);
 }
-#endif
