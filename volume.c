@@ -7,21 +7,22 @@ void add_volume(char* buffer){
 	const char* volume_high   = "\U0001F50A";
 
 	char newbuffer[10]; 
+	FILE* pa = NULL;
 	char mute;
 	int volume;
 
 	// Get mute status
-	FILE* pa_mute = popen("pamixer --get-mute", "r");
-	fscanf(pa_mute,"%c",&mute);
-	pclose(pa_mute);
+	pa = popen("pactl get-sink-mute @DEFAULT_SINK@", "r");
+	fscanf(pa,"%*s %c",&mute);
+	pclose(pa);
 
 	// Get current volume
-	FILE* pa_vol = popen("pamixer --get-volume", "r");
-	fscanf(pa_vol,"%d", &volume);
-	pclose(pa_vol);
+	pa = popen("pactl get-sink-volume @DEFAULT_SINK@", "r");
+	fscanf(pa,"%*s %*s %*s %*s %d", &volume);
+	pclose(pa);
 
-	if (mute == 't'){
-		sprintf(newbuffer, "(%2d%%)%s ",volume, &mute);
+	if (mute == 'y'){
+		sprintf(newbuffer, "%3d%%%s ",volume, volume_mute);
 	} else {
 		if (volume < 30){
 			sprintf(newbuffer, "%3d%%%s ",volume, volume_low);
