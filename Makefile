@@ -17,9 +17,8 @@ clean:
 	rm $(OBJ)
 
 install: dwmstb
-	install -T -D -m 755  dwmstb $(PREFIX)/usr/local/bin/dwmstb
+	install -T -D -m 755  dwmstb $(DESTDIR)$(PREFIX)/bin/dwmstb
 
 uninstall:
-	rm $(PREFIX)/usr/local/bin/dwmstb
-
+	rm $(DESTDIR)$(PREFIX)/bin/dwmstb
 .PHONY: all run clean
