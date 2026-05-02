@@ -2,11 +2,14 @@
 #include <unistd.h>
 #include <sys/prctl.h>
 #include <X11/Xlib.h>
+#include <strings.h>
 
 #include "dwmstb.h"
 
+
 int main() {
-	char buffer[6] = {0};
+	char clock[6] = {0};
+	char buffer[20] = {0};
 
 	// Close on parent sigkill
 	prctl(PR_SET_PDEATHSIG, SIGKILL);
@@ -21,11 +24,16 @@ int main() {
 	Window root = DefaultRootWindow(dpy);
 
 	while(1) {
-		get_clock((char*) &buffer);
+		bzero(buffer, sizeof(buffer));
+
+		get_clock((char*) clock);
+
+		sprintf(buffer, "%3d%% [%s]", get_battery(), clock);
+
 		XStoreName(dpy, root, buffer);
 		XFlush(dpy);
-		// usleep(100000);
-		sleep(31);
+
+		usleep(500000);
 	}
 
 	XCloseDisplay(dpy);
