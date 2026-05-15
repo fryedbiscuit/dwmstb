@@ -24,7 +24,7 @@ int get_battery(void) {
 	int charge;
 
 	// Get current capacity
-	file = fopen("/sys/class/power_supply/BAT1/capacity","r");
+	FILE* file = fopen("/sys/class/power_supply/BAT1/capacity","r");
 	fscanf(file,"%d",&charge);
 	fclose(file);
 	

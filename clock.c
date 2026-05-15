@@ -8,6 +8,7 @@ void get_clock(char* output) {
 	struct tm* local_time = localtime(&now);
 	int hour = local_time->tm_hour;
 	int minute = local_time->tm_min;
+	int second = local_time->tm_sec;
 
-	sprintf(output, "%02d:%02d",hour,minute);
+	sprintf(output, "%02d:%02d:%02d",hour,minute,second);
 }
