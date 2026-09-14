@@ -1,0 +1,24 @@
+{
+	"langrev": "1",
+	"warnings": [ "no-unused" ],
+	"dependency-search-paths": [ "lib" ],
+	"dependencies": [],
+	"authors": [ "John Doe <john.doe@example.com>" ],
+	"version": "0.1.0",
+	"sources": [ "src/**" ],
+	"test-sources": [ "test/**" ],
+	"build-dir": "build",
+	"output": "build",
+	"targets": {
+		"termux": {
+			"name": "dwmstb-termux",
+			"type": "executable",
+			"linked-libraries": ["X11"],
+			"target": "android-aarch64",
+			"features": ["TERMUX","BATTERY","CLOCK"],
+		},
+	},
+	"cpu": "generic",
+	"opt": "O0"
+	// See resources/examples/project_all_settings.json and 'c3c --list-project-properties' to see more properties.
+}
