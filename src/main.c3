@@ -1,8 +1,7 @@
-module dwmstb::bar;
-import dwmstb::x;
-import std;
+module dwmstb::main;
 
-extern fn int sleep(int);
+import dwmstb;
+import std;
 
 fn void main(){
 	Display* dpy = x::openDisplay(null);
@@ -13,8 +12,13 @@ fn void main(){
 	Window root = x::defaultRootWindow(dpy);
 
 	while(true){
-		x::storeName(dpy,root,"Hello world");
-		x::flush(dpy);
-		sleep(1);
+		@pool(){
+			BatteryInfo batt = info::get_battery();
+			String buffer = string::format(tmem,"%.0f°C %d%% %s",batt.temp,batt.percentage,info::clock());
+
+			x::storeName(dpy,root,buffer.zstr_tcopy());
+			x::flush(dpy);
+			os::sleep(1);
+		};
 	}
 }
