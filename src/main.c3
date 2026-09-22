@@ -5,6 +5,7 @@ import std;
 
 fn int main(){
 	Display* dpy = x::openDisplay(null);
+	defer x::closeDisplay(dpy);
 	if(dpy == null){
 		io::eprintn("Error: cound not open X display!");
 		return 1;
