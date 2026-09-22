@@ -22,5 +22,4 @@ fn int main(){
 			os::sleep(1);
 		};
 	}
-	return 0;
 }
