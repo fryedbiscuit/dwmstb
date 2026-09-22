@@ -3,10 +3,11 @@ module dwmstb::main;
 import dwmstb;
 import std;
 
-fn void main(){
+fn int main(){
 	Display* dpy = x::openDisplay(null);
 	if(dpy == null){
 		io::eprintn("Error: cound not open X display!");
+		return 1;
 	}
 
 	Window root = x::defaultRootWindow(dpy);
@@ -21,4 +22,5 @@ fn void main(){
 			os::sleep(1);
 		};
 	}
+	return 0;
 }
